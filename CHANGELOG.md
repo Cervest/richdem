@@ -1,3 +1,11 @@
+2022-12-01 (2.3.1-cervest)
+==========================
+
+Internal Cervest release
+- Makes `RICHDEM_LOGGING` option explicit in cmake
+- Bugfix in flowmet subfolder
+- Un-submodile `docs/richdem-docs` and include in the repo.
+
 2022-02-11 (2.3.1)
 ==================
 
