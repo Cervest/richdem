@@ -91,6 +91,12 @@ else()
   message(WARNING "Compiling RichDEM without GDAL!")
 endif()
 
+find_package(JlCxx REQUIRED)
+get_target_property(JlCxx_location JlCxx::cxxwrap_julia LOCATION)
+get_filename_component(JlCxx_location ${JlCxx_location} DIRECTORY)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
+target_link_libraries(richdem PUBLIC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
+
 add_executable(richdem_unittests
   tests/tests.cpp
   tests/test_main.cpp
