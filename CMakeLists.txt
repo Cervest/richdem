@@ -11,6 +11,7 @@ cmake_policy(SET CMP0077 NEW)
 find_package(GDAL)
 find_package(OpenMP REQUIRED)
 find_package(MPI)
+find_package(JlCxx REQUIRED)
 
 set(CMAKE_MACOSX_RPATH 1)
 set(BUILD_SHARED_LIBS ON)
@@ -90,6 +91,19 @@ if(USE_GDAL AND GDAL_FOUND)
 else()
   message(WARNING "Compiling RichDEM without GDAL!")
 endif()
+
+
+if(JlCxx_FOUND)
+  message(STATUS "Compiling RichDEM with JlCxx.")
+  get_target_property(JlCxx_location JlCxx::cxxwrap_julia LOCATION)
+  get_filename_component(JlCxx_location ${JlCxx_location} DIRECTORY)
+  set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
+
+  target_link_libraries(richdem PUBLIC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
+else()
+  message(FATAL_ERROR "JlCxx library not found. RichDEM cannot be compiled to link with julia")
+endif()
+
 
 add_executable(richdem_unittests
   tests/tests.cpp
