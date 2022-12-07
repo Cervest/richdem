@@ -3,7 +3,7 @@ FROM julia:latest
 # Install dependencies, definitely install gdal and openmp required by richdem
 RUN apt-get update && apt-get install -y build-essential gdb gdbserver \
     libatomic1 python gfortran perl wget m4 cmake pkg-config git libgdal-dev g++ \
-    libomp-dev
+    libomp-dev openmpi-bin libopenmpi-dev libboost-all-dev
 
 # Clone and Install libcxxwrap
 RUN set -eux; \
