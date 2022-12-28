@@ -18,6 +18,10 @@ namespace jlrichdem
             wrapped.method("width", &WrappedT::width);
             wrapped.method("height", &WrappedT::height);
             wrapped.method("numDataCells", &WrappedT::numDataCells);
+
+            wrapped.module().set_override_module(jl_base_module);
+            wrapped.module().method("getindex", [](const WrappedT &m, int_t i, int_t j)
+                                    { return m(i - 1, j - 1); });
         }
     };
 
@@ -36,6 +40,6 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
 {
     using jlcxx::Parametric;
     using jlcxx::TypeVar;
-    mod.add_type<Parametric<TypeVar<1>>>("Array2D")
+    mod.add_type<Parametric<TypeVar<1>>>("Array2D", jlcxx::julia_type("AbstractMatrix"))
         .apply<rd::Array2D<float>, rd::Array2D<rd::flowdir_t>, rd::Array2D<rd::dephier::dh_label_t>>(jlrichdem::WrapArray2D());
 }
