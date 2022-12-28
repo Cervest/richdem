@@ -108,7 +108,7 @@ if(JlCxx_FOUND)
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
   target_link_libraries(jlrichdem PUBLIC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
 else()
-  message(FATAL_ERROR "JlCxx library not found. RichDEM cannot be compiled to link with julia")
+  message(FATAL_ERROR "JlCxx library not found. jlRichDEM cannot be compiled to link with julia")
 endif()
 target_link_libraries(jlrichdem PRIVATE richdem)
 
