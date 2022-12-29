@@ -20,6 +20,7 @@ namespace jlrichdem
             wrapped.method("width", &WrappedT::width);
             wrapped.method("height", &WrappedT::height);
             wrapped.method("numDataCells", &WrappedT::numDataCells);
+            wrapped.method("saveGDAL", &WrappedT::saveGDAL);
 
             wrapped.module().set_override_module(jl_base_module);
             wrapped.module().method("getindex", [](const WrappedT &m, int_t i, int_t j)
