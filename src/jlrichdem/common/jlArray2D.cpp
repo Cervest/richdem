@@ -1,5 +1,6 @@
 #include <jlcxx/jlcxx.hpp>
 #include <jlcxx/stl.hpp>
+#include <typeinfo>
 
 #include <richdem/common/Array2D.hpp>
 #include <richdem/depressions/depression_hierarchy.hpp>
@@ -14,6 +15,7 @@ namespace jlrichdem
         void operator()(TypeWrapperT &&wrapped)
         {
             using WrappedT = typename TypeWrapperT::type;
+            using ScalarT = typename WrappedT::value_type;
             wrapped.template constructor<const std::string &>();
             wrapped.method("width", &WrappedT::width);
             wrapped.method("height", &WrappedT::height);
@@ -22,6 +24,9 @@ namespace jlrichdem
             wrapped.module().set_override_module(jl_base_module);
             wrapped.module().method("getindex", [](const WrappedT &m, int_t i, int_t j)
                                     { return m(i - 1, j - 1); });
+            wrapped.module().method("setindex!", [](WrappedT &m, ScalarT value, int_t i, int_t j)
+                                    { m(i - 1, j - 1) = value; });
+            wrapped.module().unset_override_module();
         }
     };
 
