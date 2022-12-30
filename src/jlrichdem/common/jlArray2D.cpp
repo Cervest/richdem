@@ -21,7 +21,10 @@ namespace jlrichdem
             wrapped.method("height", &WrappedT::height);
             wrapped.method("numDataCells", &WrappedT::numDataCells);
             wrapped.method("saveGDAL", &WrappedT::saveGDAL);
+            wrapped.method("get_projection", [](const WrappedT &mat)
+                           { return mat.projection; });
 
+            // Overloading functions from julia base module.
             wrapped.module().set_override_module(jl_base_module);
             wrapped.module().method("getindex", [](const WrappedT &m, int_t i, int_t j)
                                     { return m(i - 1, j - 1); });
