@@ -16,6 +16,7 @@ namespace jlrichdem
         {
             using WrappedT = typename TypeWrapperT::type;
             using ScalarT = typename WrappedT::value_type;
+            using xyT = typename WrappedT::xy_t;
             wrapped.template constructor<const std::string &>();
             wrapped.method("width", &WrappedT::width);
             wrapped.method("height", &WrappedT::height);
@@ -23,9 +24,12 @@ namespace jlrichdem
             wrapped.method("saveGDAL", &WrappedT::saveGDAL);
             wrapped.method("get_projection", [](const WrappedT &mat)
                            { return mat.projection; });
+            wrapped.method("isNoData", [](WrappedT &mat, xyT x, xyT y)
+                           { return mat.isNoData(x, y); });
 
             // Overloading functions from julia base module.
-            wrapped.module().set_override_module(jl_base_module);
+            wrapped.module()
+                .set_override_module(jl_base_module);
             wrapped.module().method("getindex", [](const WrappedT &m, int_t i, int_t j)
                                     { return m(i - 1, j - 1); });
             wrapped.module().method("setindex!", [](WrappedT &m, ScalarT value, int_t i, int_t j)
@@ -49,6 +53,7 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
 {
     using jlcxx::Parametric;
     using jlcxx::TypeVar;
+    mod.add_bits<int32_t>("xy_t");
     mod.add_type<Parametric<TypeVar<1>>>("Array2D", jlcxx::julia_type("AbstractMatrix"))
         .apply<rd::Array2D<float>, rd::Array2D<rd::flowdir_t>, rd::Array2D<rd::dephier::dh_label_t>>(jlrichdem::WrapArray2D());
 }
