@@ -52,7 +52,7 @@ add_library(richdem
 )
 
 add_library(jlrichdem
-  src/jlrichdem/common/jlArray2D.cpp)
+  src/jlrichdem/common/jlcommon.cpp)
 
 # set_target_properties(richdem PROPERTIES VERSION ${PROJECT_VERSION})
 # set_target_properties(richdem PROPERTIES SOVERSION 2)

@@ -1,11 +1,10 @@
 module richdem
-using libcxxwrap_julia_jll
 
 __precompile__(false)
 
-module array
+module common
     using CxxWrap 
-    @wrapmodule "/workspaces/richdem/build/lib/libjlrichdem.so"
+    @wrapmodule "/workspaces/richdem/build/lib/libjlrichdem"
 
     function __init__()
         @initcxx
@@ -13,6 +12,6 @@ module array
 
     Base.size(m::Array2D) = (width(m), height(m))
     Base.IndexStyle(::Type{<:Array2D}) = IndexCartesian()
-end #array
+end #common
 
 end # module richdem
