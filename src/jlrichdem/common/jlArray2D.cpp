@@ -18,6 +18,7 @@ namespace jlrichdem
             using ScalarT = typename WrappedT::value_type;
             using xyT = typename WrappedT::xy_t;
             wrapped.template constructor<const std::string &>();
+            wrapped.template constructor<xyT, xyT, const ScalarT &>();
             wrapped.method("width", &WrappedT::width);
             wrapped.method("height", &WrappedT::height);
             wrapped.method("numDataCells", &WrappedT::numDataCells);
