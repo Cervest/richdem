@@ -29,6 +29,8 @@ namespace jlrichdem
                            { return mat.isNoData(x, y); });
             wrapped.method("setNoData", [](WrappedT &mat, const ScalarT &ndval)
                            { return mat.setNoData(ndval); });
+            wrapped.method("resize", [](WrappedT &mat, const xyT width, const xyT height, const ScalarT &val)
+                           { return mat.resize(width, height, val); });
 
             // Overloading functions from julia base module.
             wrapped.module()
