@@ -52,7 +52,8 @@ add_library(richdem
 )
 
 add_library(jlrichdem
-  src/jlrichdem/common/jlcommon.cpp)
+  src/jlrichdem/common/jlcommon.cpp
+  src/jlrichdem/misc/jlmisc.cpp)
 
 # set_target_properties(richdem PROPERTIES VERSION ${PROJECT_VERSION})
 # set_target_properties(richdem PROPERTIES SOVERSION 2)
