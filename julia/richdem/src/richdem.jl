@@ -18,7 +18,7 @@ module misc
     using CxxWrap
     @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module)
 
-    function __init()
+    function __init__()
         @initcxx
     end
 end #misc

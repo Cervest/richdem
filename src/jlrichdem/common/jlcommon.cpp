@@ -23,6 +23,7 @@ namespace jlrichdem
             wrapped.method("height", &WrappedT::height);
             wrapped.method("numDataCells", &WrappedT::numDataCells);
             wrapped.method("saveGDAL", &WrappedT::saveGDAL);
+            wrapped.method("noData", &WrappedT::noData);
             wrapped.method("get_projection", [](const WrappedT &mat)
                            { return mat.projection; });
             wrapped.method("isNoData", [](WrappedT &mat, xyT x, xyT y)
