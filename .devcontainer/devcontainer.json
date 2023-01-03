@@ -7,6 +7,6 @@
     ],
     "dockerFile": "Dockerfile",
     "runArgs": [
-        "--privileged"
+        // "--privileged" //this is to allow to run BinaryBuilder inside the container
     ]
 }

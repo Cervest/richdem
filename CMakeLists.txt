@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 
 project(richdem
-  VERSION 2.2.11
+  VERSION 2.3.1
   DESCRIPTION "High-performance terrain analysis"
   LANGUAGES CXX
 )
@@ -17,6 +17,8 @@ set(CMAKE_MACOSX_RPATH 1)
 set(BUILD_SHARED_LIBS ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+
 
 
 add_subdirectory(apps)
@@ -49,6 +51,9 @@ add_library(richdem
   src/terrain_generation/PerlinNoise.cpp
 )
 
+add_library(jlrichdem
+  src/jlrichdem/common/jlcommon.cpp)
+
 # set_target_properties(richdem PROPERTIES VERSION ${PROJECT_VERSION})
 # set_target_properties(richdem PROPERTIES SOVERSION 2)
 target_include_directories(richdem
@@ -62,6 +67,8 @@ target_compile_features(richdem
   cxx_auto_type
   cxx_std_17
 )
+
+target_compile_features(jlrichdem PUBLIC cxx_auto_type cxx_std_17)
 
 if(OpenMP_CXX_FOUND)
   target_link_libraries(richdem PUBLIC OpenMP::OpenMP_CXX)
@@ -95,16 +102,15 @@ endif()
 
 
 if(JlCxx_FOUND)
-  message(STATUS "Compiling RichDEM with JlCxx.")
+  message(STATUS "Compiling jlRichDEM with JlCxx.")
   get_target_property(JlCxx_location JlCxx::cxxwrap_julia LOCATION)
   get_filename_component(JlCxx_location ${JlCxx_location} DIRECTORY)
   set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib;${JlCxx_location}")
-
-  target_link_libraries(richdem PUBLIC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
+  target_link_libraries(jlrichdem PUBLIC JlCxx::cxxwrap_julia JlCxx::cxxwrap_julia_stl)
 else()
-  message(FATAL_ERROR "JlCxx library not found. RichDEM cannot be compiled to link with julia")
+  message(FATAL_ERROR "JlCxx library not found. jlRichDEM cannot be compiled to link with julia")
 endif()
-
+target_link_libraries(jlrichdem PRIVATE richdem)
 
 add_executable(richdem_unittests
   tests/tests.cpp
@@ -120,4 +126,12 @@ install(
   ARCHIVE DESTINATION "lib"
   RUNTIME DESTINATION "bin"
 )
+
+install(
+  TARGETS jlrichdem
+  LIBRARY DESTINATION "lib"
+  ARCHIVE DESTINATION "lib"
+  RUNTIME DESTINATION "bin"
+)
+
 install(DIRECTORY include/richdem DESTINATION include)
