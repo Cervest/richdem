@@ -27,6 +27,8 @@ namespace jlrichdem
                            { return mat.projection; });
             wrapped.method("isNoData", [](WrappedT &mat, xyT x, xyT y)
                            { return mat.isNoData(x, y); });
+            wrapped.method("setNoData", [](WrappedT &mat, const ScalarT &ndval)
+                           { return mat.setNoData(ndval);});
 
             // Overloading functions from julia base module.
             wrapped.module()
