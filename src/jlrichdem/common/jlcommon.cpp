@@ -28,7 +28,7 @@ namespace jlrichdem
             wrapped.method("isNoData", [](WrappedT &mat, xyT x, xyT y)
                            { return mat.isNoData(x, y); });
             wrapped.method("setNoData", [](WrappedT &mat, const ScalarT &ndval)
-                           { return mat.setNoData(ndval);});
+                           { return mat.setNoData(ndval); });
 
             // Overloading functions from julia base module.
             wrapped.module()
@@ -57,6 +57,8 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
     using jlcxx::Parametric;
     using jlcxx::TypeVar;
     mod.add_bits<int32_t>("xy_t");
+    mod.add_bits<rd::flowdir_t>("flowdir_t");
+    mod.add_bits<rd::dephier::dh_label_t>("dh_label_t");
     mod.add_bits<rd::Topology>("Topology", jlcxx::julia_type("CppEnum"));
     mod.set_const("D4", rd::Topology::D4);
     mod.set_const("D8", rd::Topology::D8);
