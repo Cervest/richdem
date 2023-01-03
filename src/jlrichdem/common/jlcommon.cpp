@@ -59,5 +59,5 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
     mod.set_const("D4", rd::Topology::D4);
     mod.set_const("D8", rd::Topology::D8);
     mod.add_type<Parametric<TypeVar<1>>>("Array2D", jlcxx::julia_type("AbstractMatrix"))
-        .apply<rd::Array2D<float>, rd::Array2D<rd::flowdir_t>, rd::Array2D<rd::dephier::dh_label_t>>(jlrichdem::WrapArray2D());
+        .apply<rd::Array2D<double>, rd::Array2D<float>, rd::Array2D<rd::flowdir_t>, rd::Array2D<rd::dephier::dh_label_t>>(jlrichdem::WrapArray2D());
 }
