@@ -12,6 +12,7 @@ namespace rd = richdem;
 JLCXX_MODULE define_misc_module(jlcxx::Module &mod)
 {
     mod.method("BucketFillFromEdgesD8", [](const rd::Array2D<double> &check_raster,
-                                           rd::Array2D<rd::dephier::dh_label_t> &set_raster, double check_value, rd::dephier::dh_label_t set_value)
+                                           rd::Array2D<rd::dephier::dh_label_t> &set_raster, 
+                                           double check_value, rd::dephier::dh_label_t set_value)
                { return rd::BucketFillFromEdges<rd::Topology::D8>(check_raster, set_raster, check_value, set_value); });
 }
