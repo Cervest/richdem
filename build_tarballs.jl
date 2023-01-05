@@ -17,7 +17,7 @@ cd richdem/
 mkdir build
 cd build
 cmake -DJulia_PREFIX=$Julia_PREFIX -DCMAKE_FIND_ROOT_PATH=$prefix -DJlCxx_DIR=$prefix/lib/cmake/JlCxx -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} -DCMAKE_BUILD_TYPE=Release -DUSE_GDAL=ON ../. 
-cmake --build . --config Release --target install 
+cmake --build . --config Release --target install :
 exit
 """
 
