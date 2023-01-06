@@ -5,6 +5,7 @@
 #include <richdem/common/Array2D.hpp>
 #include <richdem/common/constants.hpp>
 #include <richdem/depressions/depression_hierarchy.hpp>
+#include <richdem/depressions/fill_spill_merge.hpp>
 namespace rd = richdem;
 
 JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
@@ -19,4 +20,11 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
                                                     rd::Array2D<rd::dephier::dh_label_t> &label,
                                                     rd::Array2D<int8_t> &flowdirs)
                { return rd::dephier::GetDepressionHierarchy<double, rd::Topology::D8>(topo, label, flowdirs); });
+
+    mod.method("FillSpillMerge", [](const rd::Array2D<double> &topo,
+                                    const rd::Array2D<rd::dephier::dh_label_t> &label,
+                                    const rd::Array2D<rd::flowdir_t> &flowdirs,
+                                    rd::dephier::DepressionHierarchy<double> &deps,
+                                    rd::Array2D<double> &wtd)
+               { return rd::dephier::FillSpillMerge(topo, label, flowdirs, deps, wtd); });
 }
