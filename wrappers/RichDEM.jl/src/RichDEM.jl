@@ -25,7 +25,7 @@ end #misc
 
 module depressions
     using CxxWrap
-    struct AbstractDepression{T} end
+    abstract type AbstractDepression{T} end
     mutable struct Depression{T} <: AbstractDepression{T}
         pit_cell::UInt32
         out_cell::UInt32
@@ -44,7 +44,6 @@ module depressions
         water_vol::Float64
         total_elevation::Float64
     end
-    export Depression
     @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module)
 
     function __init__()
