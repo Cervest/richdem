@@ -45,6 +45,6 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &types)
 {
     using jlcxx::Parametric;
     using jlcxx::TypeVar;
-    types.add_type<Parametric<TypeVar<1>>>("Depression", jlcxx::julia_type("Depression"))
+    types.add_type<Parametric<TypeVar<1>>>("Depression", jlcxx::julia_type("AbstractDepression"))
         .apply<rd::dephier::Depression<double>>(jlrichdem::WrapDepression());
 }

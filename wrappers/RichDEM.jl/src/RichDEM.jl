@@ -25,7 +25,8 @@ end #misc
 
 module depressions
     using CxxWrap
-    mutable struct Depression{T<:Real}
+    struct AbstractDepression{T} end
+    mutable struct Depression{T} <: AbstractDepression{T}
         pit_cell::UInt32
         out_cell::UInt32
         parent::UInt32
