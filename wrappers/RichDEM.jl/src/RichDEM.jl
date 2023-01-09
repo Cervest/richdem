@@ -25,12 +25,14 @@ end #misc
 
 module depressions
     using CxxWrap
+    
     @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module)
 
     function __init__()
         @initcxx
     end
-
+    
+    
     # Base.size(dep_hier::DepressionHierarchyDouble) = size(dep_hier)
     # Base.IndexStyle(::Type{<:DepressionHierarchyDouble}) = IndexCartesian()
 end #depressions
