@@ -25,25 +25,11 @@ end #misc
 
 module depressions
     using CxxWrap
-    mutable struct Depression{T<:Real}
+    mutable struct TestDepression
         pit_cell::UInt32
-        out_cell::UInt32
-        parent::UInt32
-        odep::UInt32
-        geolink::UInt32
-        pit_elev::T
-        out_elev::T
-        lchild::UInt32
-        rchild::UInt32
-        ocean_parent::Bool
-        ocean_linked::Vector{UInt32}
-        dep_label::UInt32
-        cell_count::UInt32
-        dep_vol::Float64
-        water_vol::Float64
-        total_elevation::Float64
+        pit_elev::Float32
     end
-    export Depression
+    export TestDepression
     @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module)
 
     function __init__()
