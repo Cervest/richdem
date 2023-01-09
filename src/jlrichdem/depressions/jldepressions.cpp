@@ -12,7 +12,11 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
 {
     mod.map_type<rd::dephier::Depression<float>>("Depression");
     mod.map_type<rd::dephier::Depression<double>>("Depression");
-    mod.method("GetDepressionHierarchy", [](const rd::Array2D<double> &topo,
-                                            rd::Array2D<rd::dephier::dh_label_t> &label, rd::Array2D<int8_t> &flowdirs)
-               { return rd::dephier::GetDepressionHierarchy<double, rd::Topology::D8>(topo, label, flowdirs); });
+    mod.method("GetDepressionHierarchyDoubleD8",
+               [](const rd::Array2D<double> &dem,
+                  rd::Array2D<rd::dephier::dh_label_t> &label,
+                  rd::Array2D<int8_t> &flowdirs)
+               {
+                   return rd::dephier::GetDepressionHierarchy<double, rd::Topology::D8>(dem, label, flowdirs);
+               });
 }
