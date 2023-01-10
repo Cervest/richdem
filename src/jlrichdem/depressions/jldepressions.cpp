@@ -25,8 +25,9 @@ namespace jlrichdem
             wrapped.module()
                 .set_override_module(jl_base_module);
             wrapped.module().method("getindex", [](const WrappedT &vec, int_t i)
-                                    { return vec(i - 1); });
-
+                                    { return vec[i - 1]; });
+            wrapped.module().method("setindex!", [](WrappedT &vec, DepressionT value, int_t i)
+                                    { vec[i - 1] = value; });
             wrapped.module().unset_override_module();
         }
     };
