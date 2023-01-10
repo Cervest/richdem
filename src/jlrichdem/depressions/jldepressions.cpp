@@ -1,23 +1,31 @@
 #include <jlcxx/jlcxx.hpp>
 #include <jlcxx/stl.hpp>
-#include <typeinfo>
-
 #include <richdem/common/Array2D.hpp>
 #include <richdem/common/constants.hpp>
 #include <richdem/depressions/depression_hierarchy.hpp>
 #include <richdem/depressions/fill_spill_merge.hpp>
+#include <typeinfo>
+#include <vector>
 namespace rd = richdem;
 
 namespace jlrichdem
 {
-    struct WrapDepressionHierarchy
+    struct WrapDepression
     {
         template <typename TypeWrapperT>
         void operator()(TypeWrapperT &&wrapped)
         {
             using WrappedT = typename TypeWrapperT::type;
-            using DepressionT = typename WrappedT::value_type;
-            using ScalarT = typename DepressionT::value_type;
+        }
+    };
+    struct WrapDepressionHierarchy
+    {
+        template <typename TypeWrapperT>
+        void operator()(TypeWrapperT &&wrapped)
+        {
+            using WrappedT = typename TypeWrapperT::type;      // WrappedT = std::vector<Depression<float>>
+            using DepressionT = typename WrappedT::value_type; // DepressionT = Depression<float>
+            using ScalarT = typename DepressionT::value_type;  // float
             wrapped.method("length", [](const WrappedT &vec)
                            { return vec.size(); });
 
@@ -37,8 +45,9 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
 {
     using jlcxx::Parametric;
     using jlcxx::TypeVar;
-    mod.map_type<rd::dephier::Depression<float>>("Depression");
-    mod.map_type<rd::dephier::Depression<double>>("Depression");
+    // mod.map_type<rd::dephier::Depression<float>>("Depression");
+    // mod.map_type<rd::dephier::Depression<double>>("Depression");
+    mod.map_type<rd::dephier::Depression<float>>("DepressionFloat");
     mod.add_type<Parametric<TypeVar<1>>>("DepressionHierarchy", jlcxx::julia_type("AbstractVector"))
         .apply<rd::dephier::DepressionHierarchy<float>>(jlrichdem::WrapDepressionHierarchy());
 }

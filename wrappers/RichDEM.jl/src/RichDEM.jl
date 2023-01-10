@@ -25,14 +25,14 @@ end #misc
 
 module depressions
     using CxxWrap
-    mutable struct Depression{T <: Real}
+    mutable struct DepressionFloat
         pit_cell::UInt32
         out_cell::UInt32
         parent::UInt32
         odep::UInt32
         geolink::UInt32
-        pit_elev::T
-        out_elev::T
+        pit_elev::Float32
+        out_elev::Float32
         lchild::UInt32
         rchild::UInt32
         ocean_parent::Bool
@@ -43,6 +43,7 @@ module depressions
         water_vol::Float64
         total_elevation::Float64
     end
+    
     @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module)
 
     function __init__()
