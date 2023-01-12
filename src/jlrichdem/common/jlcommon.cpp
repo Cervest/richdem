@@ -26,8 +26,8 @@ namespace jlrichdem
             wrapped.method("noData", &WrappedT::noData);
             wrapped.method("get_projection", [](const WrappedT &mat)
                            { return mat.projection; });
-            wrapped.method("isNoData", [](WrappedT &mat, xyT x, xyT y)
-                           { return mat.isNoData(x, y); });
+            wrapped.method("isNoData", [](WrappedT &mat, uint32_t i)
+                           { return mat.isNoData(i); });
             wrapped.method("setNoData", [](WrappedT &mat, const ScalarT &ndval)
                            { return mat.setNoData(ndval); });
             wrapped.method("resize", [](WrappedT &mat, const xyT width, const xyT height, const ScalarT &val)
