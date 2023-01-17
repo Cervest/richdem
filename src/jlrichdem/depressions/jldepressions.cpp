@@ -40,9 +40,17 @@ namespace jlrichdem
             wrapped.method("ocean_parent", [](WrappedT &depression)
                            { return depression.ocean_parent; });
             wrapped.method("ocean_linked", [](WrappedT &depression)
-                           { return jlcxx::ArrayRef<ScalarT, 1>(&(depression.ocean_linked[0]), depression.ocean_linked.size()); });
+                           { return jlcxx::ArrayRef<rd::dephier::dh_label_t, 1>(&(depression.ocean_linked[0]), depression.ocean_linked.size()); });
             wrapped.method("dep_label", [](WrappedT &depression)
                            { return depression.dep_label; });
+            wrapped.method("cell_count", [](WrappedT &depression)
+                           { return depression.cell_count; });
+            wrapped.method("dep_vol", [](WrappedT &depression)
+                           { return depression.dep_vol; });
+            wrapped.method("water_vol", [](WrappedT &depression)
+                           { return depression.water_vol; });
+            wrapped.method("total_elevation", [](WrappedT &depression)
+                           { return depression.total_elevation; });
         }
     };
 
@@ -90,7 +98,7 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
     mod.add_type<Parametric<TypeVar<1>>>("Depression")
         .apply<rd::dephier::Depression<float>, rd::dephier::Depression<double>>(jlrichdem::WrapDepression());
 
-    mod.add_type<Parametric<TypeVar<1>>>("DepressionHierarchy", jlcxx::julia_type("AbstractVector"))
+    mod.add_type<Parametric<TypeVar<1>>>("DepressionHierarchy")
         .apply<rd::dephier::DepressionHierarchy<float>,
                rd::dephier::DepressionHierarchy<double>>(jlrichdem::WrapDepressionHierarchy());
 
@@ -102,43 +110,18 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
                                                     rd::Array2D<rd::dephier::dh_label_t> &label,
                                                     rd::Array2D<int8_t> &flowdirs)
                { return rd::dephier::GetDepressionHierarchy<double, rd::Topology::D8>(topo, label, flowdirs); });
+
+    mod.method("FillSpillMergeFloat", [](const rd::Array2D<float> &topo,
+                                         const rd::Array2D<rd::dephier::dh_label_t> &label,
+                                         const rd::Array2D<rd::flowdir_t> &flowdirs,
+                                         rd::dephier::DepressionHierarchy<float> &deps,
+                                         rd::Array2D<double> &wtd)
+               { return rd::dephier::FillSpillMerge(topo, label, flowdirs, deps, wtd); });
+
+    mod.method("FillSpillMergeDouble", [](const rd::Array2D<double> &topo,
+                                          const rd::Array2D<rd::dephier::dh_label_t> &label,
+                                          const rd::Array2D<rd::flowdir_t> &flowdirs,
+                                          rd::dephier::DepressionHierarchy<double> &deps,
+                                          rd::Array2D<double> &wtd)
+               { return rd::dephier::FillSpillMerge(topo, label, flowdirs, deps, wtd); });
 }
-
-// JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
-// {
-//     jlcxx::TypeWrapper<rd::dephier::Depression<double>> depression_double =
-//         mod.add_type<rd::dephier::Depression<double>>("DepressionDouble");
-
-//     jlcxx::TypeWrapper<rd::dephier::DepressionHierarchy<double>> depression_hierarchy_double =
-//         mod.add_type<rd::dephier::DepressionHierarchy<double>>("DepressionHierarchyDouble");
-
-//     jlcxx::TypeWrapper<rd::dephier::Depression<float>> depression_float =
-//         mod.add_type<rd::dephier::Depression<float>>("DepressionFloat");
-
-//     jlcxx::TypeWrapper<rd::dephier::DepressionHierarchy<float>> depression_hierarchy_float =
-//         mod.add_type<rd::dephier::DepressionHierarchy<float>>("DepressionHierarchyFloat");
-
-//     mod.method("GetDepressionHierarchyDoubleD8", [](const rd::Array2D<double> &topo,
-//                                                     rd::Array2D<rd::dephier::dh_label_t> &label,
-//                                                     rd::Array2D<int8_t> &flowdirs)
-//                { return rd::dephier::GetDepressionHierarchy<double, rd::Topology::D8>(topo, label, flowdirs); });
-
-//     mod.method("FillSpillMergeDouble", [](const rd::Array2D<double> &topo,
-//                                           const rd::Array2D<rd::dephier::dh_label_t> &label,
-//                                           const rd::Array2D<rd::flowdir_t> &flowdirs,
-//                                           rd::dephier::DepressionHierarchy<double> &deps,
-//                                           rd::Array2D<double> &wtd)
-//                { return rd::dephier::FillSpillMerge(topo, label, flowdirs, deps, wtd); });
-
-//     mod.method("GetDepressionHierarchyFloatD8", [](const rd::Array2D<float> &topo,
-//                                                    rd::Array2D<rd::dephier::dh_label_t> &label,
-//                                                    rd::Array2D<int8_t> &flowdirs)
-//                { return rd::dephier::GetDepressionHierarchy<float, rd::Topology::D8>(topo, label, flowdirs); });
-
-//     mod.method("FillSpillMergeFloat", [](const rd::Array2D<float> &topo,
-//                                          const rd::Array2D<rd::dephier::dh_label_t> &label,
-//                                          const rd::Array2D<rd::flowdir_t> &flowdirs,
-//                                          rd::dephier::DepressionHierarchy<float> &deps,
-//                                          rd::Array2D<double> &wtd)
-//                { return rd::dephier::FillSpillMerge(topo, label, flowdirs, deps, wtd); });
-// }
