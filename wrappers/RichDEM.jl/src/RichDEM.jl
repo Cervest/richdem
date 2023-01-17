@@ -49,8 +49,9 @@ module depressions
         @initcxx
     end
     
-    # Base.size(dep_hier::DepressionHierarchyDouble) = size(dep_hier)
-    # Base.IndexStyle(::Type{<:DepressionHierarchyDouble}) = IndexCartesian()
+    Base.size(dep_hier::DepressionHierarchy) = (size(dep_hier),)
+    Base.IndexStyle(::Type{<:DepressionHierarchy}) = IndexCartesian()
+    Base.length(dep_hier::DepressionHierarchy) = size(dep_hier)
 end #depressions
 
 end # module richdem

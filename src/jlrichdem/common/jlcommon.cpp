@@ -59,12 +59,12 @@ JLCXX_MODULE define_julia_module(jlcxx::Module &mod)
 {
     using jlcxx::Parametric;
     using jlcxx::TypeVar;
-    mod.add_bits<int32_t>("xy_t");
-    mod.add_bits<rd::flowdir_t>("flowdir_t");
-    mod.add_bits<rd::dephier::dh_label_t>("dh_label_t");
-    mod.add_bits<rd::Topology>("Topology", jlcxx::julia_type("CppEnum"));
-    mod.set_const("D4", rd::Topology::D4);
-    mod.set_const("D8", rd::Topology::D8);
+    // mod.add_bits<int32_t>("xy_t");
+    // mod.add_bits<rd::flowdir_t>("flowdir_t");
+    // mod.add_bits<rd::dephier::dh_label_t>("dh_label_t");
+    // mod.add_bits<rd::Topology>("Topology", jlcxx::julia_type("CppEnum"));
+    // mod.set_const("D4", rd::Topology::D4);
+    // mod.set_const("D8", rd::Topology::D8);
     mod.add_type<Parametric<TypeVar<1>>>("Array2D", jlcxx::julia_type("AbstractMatrix"))
         .apply<rd::Array2D<double>, rd::Array2D<float>, rd::Array2D<rd::flowdir_t>, rd::Array2D<rd::dephier::dh_label_t>>(jlrichdem::WrapArray2D());
 }
