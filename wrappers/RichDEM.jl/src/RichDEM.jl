@@ -25,7 +25,13 @@ end #misc
 
 module depressions
     using CxxWrap
-    mutable struct jlDepression{T}
+    
+    @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module)
+
+    function __init__()
+        @initcxx
+    end
+    mutable struct DepressionSubset{T}
         pit_cell::UInt32
         out_cell::UInt32
         parent::UInt32
@@ -42,20 +48,19 @@ module depressions
         water_vol::Float64
         total_elevation::Float64
     end
-    @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module)
 
-    function __init__()
-        @initcxx
+    mutable struct Depression{T}
+        dep_sub::DepressionSubset{T}
+        ocean_linked::Vector{UInt32}
     end
 
-    
-    
-    jl_ocean_linked(dep::Depression) = ocean_linked(dep)
-    function make_jl_depression(dep::Depression)
+    function Depression(dep::CxxDepression)
         dep_obj = dep.cpp_object
         type = typeof(dep).parameters[1]
-        jldep_ptr = Ptr{jlDepression{type}}(dep_obj)
-        return  unsafe_load(Ptr{jlDepression{type}}(jldep_ptr))
+        dep_sub_ptr = Ptr{DepressionSubset{type}}(dep_obj)
+        dep_sub = unsafe_load(Ptr{DepressionSubset{type}}(dep_sub_ptr))
+        ol = ocean_linked(dep)
+        Depression{type}(dep_sub, ol)
     end
 
     Base.size(dep_hier::DepressionHierarchy) = (size(dep_hier),)

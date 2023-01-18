@@ -95,7 +95,7 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
     using jlcxx::Parametric;
     using jlcxx::TypeVar;
 
-    mod.add_type<Parametric<TypeVar<1>>>("Depression")
+    mod.add_type<Parametric<TypeVar<1>>>("CxxDepression")
         .apply<rd::dephier::Depression<float>, rd::dephier::Depression<double>>(jlrichdem::WrapDepression());
 
     mod.add_type<Parametric<TypeVar<1>>>("DepressionHierarchy")
