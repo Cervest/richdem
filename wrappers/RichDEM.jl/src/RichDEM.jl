@@ -31,7 +31,7 @@ module depressions
     function __init__()
         @initcxx
     end
-    mutable struct DepressionSubset{T}
+    struct DepressionSubset{T}
         pit_cell::UInt32
         out_cell::UInt32
         parent::UInt32
@@ -50,9 +50,25 @@ module depressions
     end
 
     mutable struct Depression{T}
-        dep_sub::DepressionSubset{T}
+        pit_cell::UInt32
+        out_cell::UInt32
+        parent::UInt32
+        odep::UInt32
+        geolink::UInt32
+        pit_elev::T
+        out_elev::T
+        lchild::UInt32
+        rchild::UInt32
+        ocean_parent::Bool
+        dep_label::UInt32
+        cell_count::UInt32
+        dep_vol::Float64
+        water_vol::Float64
+        total_elevation::Float64
         ocean_linked::Vector{UInt32}
     end
+
+    expand_struct(sub) = map(n->getfield(sub,n), fieldnames(typeof(sub)))
 
     function Depression(dep::CxxDepression)
         dep_obj = dep.cpp_object
@@ -60,7 +76,7 @@ module depressions
         dep_sub_ptr = Ptr{DepressionSubset{type}}(dep_obj)
         dep_sub = unsafe_load(Ptr{DepressionSubset{type}}(dep_sub_ptr))
         ol = ocean_linked(dep)
-        Depression{type}(dep_sub, ol)
+        Depression{type}(expand_struct(dep_sub)..., ol)
     end
 
     Base.size(dep_hier::DepressionHierarchy) = (size(dep_hier),)
