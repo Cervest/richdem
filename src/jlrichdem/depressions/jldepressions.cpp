@@ -65,13 +65,13 @@ namespace jlrichdem
             wrapped.method("size", [](WrappedT &vec)
                            { return vec.size(); });
 
-            // Overloading functions from julia base module.
-            wrapped.module()
-                .set_override_module(jl_base_module);
-            wrapped.module().method("getindex", [](const WrappedT &vec, int_t i)
-                                    { return vec[i - 1]; });
-            wrapped.module().method("setindex!", [](WrappedT &vec, StructT value, int_t i)
-                                    { vec[i - 1] = value; });
+            wrapped.module().set_override_module(jlcxx::stl::StlWrappers::instance().module());
+            wrapped.method("cxxgetindex", [](const WrappedT &v, int_t i) -> typename WrappedT::const_reference
+                           { return v[i - 1]; });
+            wrapped.method("cxxgetindex", [](WrappedT &v, int_t i) -> typename WrappedT::reference
+                           { return v[i - 1]; });
+            wrapped.method("cxxsetindex!", [](WrappedT &v, const StructT &val, int_t i)
+                           { v[i - 1] = val; });
             wrapped.module().unset_override_module();
         }
     };
@@ -98,7 +98,7 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
     mod.add_type<Parametric<TypeVar<1>>>("CxxDepression")
         .apply<rd::dephier::Depression<float>, rd::dephier::Depression<double>>(jlrichdem::WrapDepression());
 
-    mod.add_type<Parametric<TypeVar<1>>>("DepressionHierarchy")
+    mod.add_type<Parametric<TypeVar<1>>>("DepressionHierarchy", jlcxx::julia_type("StdVector"))
         .apply<rd::dephier::DepressionHierarchy<float>,
                rd::dephier::DepressionHierarchy<double>>(jlrichdem::WrapDepressionHierarchy());
 

@@ -79,9 +79,10 @@ module depressions
         Depression{type}(expand_struct(dep_sub)..., ol)
     end
 
-    Base.size(dep_hier::DepressionHierarchy) = (size(dep_hier),)
-    Base.IndexStyle(::Type{<:DepressionHierarchy}) = IndexCartesian()
-    Base.length(dep_hier::DepressionHierarchy) = size(dep_hier)
+    Base.IndexStyle(::Type{<:DepressionHierarchy}) = IndexLinear()
+    Base.size(v::DepressionHierarchy) = (Int(size(v)),)
+    Base.getindex(v::DepressionHierarchy, i::Int) = CxxWrap.StdLib.cxxgetindex(v, i)[]
+    Base.setindex!(v::DepressionHierarchy{T}, val, i::Int) where {T} = CxxWrap.StdLib.cxxsetindex!(v, convert(T,val), i)
 end #depressions
 
 end # module richdem
