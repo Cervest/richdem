@@ -1,12 +1,11 @@
+
+
 module RichDEM
 module common
 using CxxWrap
-
-import Libdl
-import RichDEM_jll
-
-# @wrapmodule "/workspaces/richdem/build/lib/libjlrichdem"
-
+using RichDEM_jll
+using Libdl
+#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_julia_module, Libdl.RTLD_GLOBAL)
 @wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module, Libdl.RTLD_GLOBAL)
 
 function __init__()
@@ -19,7 +18,9 @@ end #common
 
 module misc
 using CxxWrap
-export 
+using RichDEM_jll
+using Libdl
+#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module, Libdl.RTLD_GLOBAL)
 @wrapmodule(RichDEM_jll.libjlrichdem_path, :define_misc_module, Libdl.RTLD_GLOBAL)
 
 function __init__()
@@ -29,8 +30,10 @@ end #misc
 
 module depressions
 using CxxWrap
-
+using RichDEM_jll
+using Libdl
 export Depression
+#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module, Libdl.RTLD_GLOBAL)
 @wrapmodule(RichDEM_jll.libjlrichdem_path, :define_depressions_module, Libdl.RTLD_GLOBAL)
 
 function __init__()
