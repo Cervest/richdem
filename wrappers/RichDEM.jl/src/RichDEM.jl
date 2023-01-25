@@ -7,7 +7,7 @@ import RichDEM_jll
 
 # @wrapmodule "/workspaces/richdem/build/lib/libjlrichdem"
 
-@wrapmodule(RichDEM_jll.libjlrichdem, :define_julia_module, Libdl.RTLD_GLOBAL)
+@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module, Libdl.RTLD_GLOBAL)
 
 function __init__()
     @initcxx
