@@ -1,8 +1,19 @@
 name = "RichDEM"
-uuid = "db566695-6f60-45f3-9b37-d3ff769e9aca"
-authors = ["Sunayana Ghosh <sunayana@cervest.earth>"]
+uuid = "94a1c18c-0d95-461b-994e-5c3447d2ff66"
+authors = ["Sunayana Ghosh <sunayana@cervest.earth>", "Tim DuBois <tim@cervest.earth>"]
 version = "0.1.0"
 
 [deps]
 CxxWrap = "1f15a43c-97ca-5a2a-ae31-89f07a497df4"
+Libdl = "8f399da3-3557-5675-b5ff-fb832c97cbdb"
+RichDEM_jll = "77183ce2-e64e-50a0-b706-bc4fd4ad6a9c"
 libcxxwrap_julia_jll = "3eaa8342-bff7-56a5-9981-c04077f7cee7"
+
+[compat]
+julia = "1.7"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

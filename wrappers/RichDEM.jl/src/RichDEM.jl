@@ -1,88 +1,94 @@
 module RichDEM
-
-__precompile__(false)
-
 module common
-    using CxxWrap 
-    @wrapmodule "/workspaces/richdem/build/lib/libjlrichdem"
+using CxxWrap
 
-    function __init__()
-        @initcxx
-    end
+import Libdl
+import RichDEM_jll
 
-    Base.size(m::Array2D) = (width(m), height(m))
-    Base.IndexStyle(::Type{<:Array2D}) = IndexCartesian()
+# @wrapmodule "/workspaces/richdem/build/lib/libjlrichdem"
+
+@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module, Libdl.RTLD_GLOBAL)
+
+function __init__()
+    @initcxx
+end
+
+Base.size(m::Array2D) = (width(m), height(m))
+Base.IndexStyle(::Type{<:Array2D}) = IndexCartesian()
 end #common
 
 module misc
-    using CxxWrap
-    @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module)
+using CxxWrap
+export 
+@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_misc_module, Libdl.RTLD_GLOBAL)
 
-    function __init__()
-        @initcxx
-    end
+function __init__()
+    @initcxx
+end
 end #misc
 
 module depressions
-    using CxxWrap
-    
-    @wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module)
+using CxxWrap
 
-    function __init__()
-        @initcxx
-    end
-    struct DepressionSubset{T}
-        pit_cell::UInt32
-        out_cell::UInt32
-        parent::UInt32
-        odep::UInt32
-        geolink::UInt32
-        pit_elev::T
-        out_elev::T
-        lchild::UInt32
-        rchild::UInt32
-        ocean_parent::Bool
-        dep_label::UInt32
-        cell_count::UInt32
-        dep_vol::Float64
-        water_vol::Float64
-        total_elevation::Float64
-    end
+export Depression
+@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_depressions_module, Libdl.RTLD_GLOBAL)
 
-    mutable struct Depression{T}
-        pit_cell::UInt32
-        out_cell::UInt32
-        parent::UInt32
-        odep::UInt32
-        geolink::UInt32
-        pit_elev::T
-        out_elev::T
-        lchild::UInt32
-        rchild::UInt32
-        ocean_parent::Bool
-        dep_label::UInt32
-        cell_count::UInt32
-        dep_vol::Float64
-        water_vol::Float64
-        total_elevation::Float64
-        ocean_linked::Vector{UInt32}
-    end
+function __init__()
+    @initcxx
+end
+struct DepressionSubset{T}
+    pit_cell::UInt32
+    out_cell::UInt32
+    parent::UInt32
+    odep::UInt32
+    geolink::UInt32
+    pit_elev::T
+    out_elev::T
+    lchild::UInt32
+    rchild::UInt32
+    ocean_parent::Bool
+    dep_label::UInt32
+    cell_count::UInt32
+    dep_vol::Float64
+    water_vol::Float64
+    total_elevation::Float64
+end
 
-    expand_struct(sub) = map(n->getfield(sub,n), fieldnames(typeof(sub)))
+mutable struct Depression{T}
+    pit_cell::UInt32
+    out_cell::UInt32
+    parent::UInt32
+    odep::UInt32
+    geolink::UInt32
+    pit_elev::T
+    out_elev::T
+    lchild::UInt32
+    rchild::UInt32
+    ocean_parent::Bool
+    dep_label::UInt32
+    cell_count::UInt32
+    dep_vol::Float64
+    water_vol::Float64
+    total_elevation::Float64
+    ocean_linked::Vector{UInt32}
+end
 
-    function Depression(dep::CxxDepression)
-        dep_obj = dep.cpp_object
-        type = typeof(dep).parameters[1]
-        dep_sub_ptr = Ptr{DepressionSubset{type}}(dep_obj)
-        dep_sub = unsafe_load(Ptr{DepressionSubset{type}}(dep_sub_ptr))
-        ol = ocean_linked(dep)
-        Depression{type}(expand_struct(dep_sub)..., ol)
-    end
+expand_struct(sub) = map(n -> getfield(sub, n), fieldnames(typeof(sub)))
 
-    Base.IndexStyle(::Type{<:DepressionHierarchy}) = IndexLinear()
-    Base.size(v::DepressionHierarchy) = (Int(size(v)),)
-    Base.getindex(v::DepressionHierarchy, i::Int) = CxxWrap.StdLib.cxxgetindex(v, i)[]
-    Base.setindex!(v::DepressionHierarchy{T}, val, i::Int) where {T} = CxxWrap.StdLib.cxxsetindex!(v, convert(T,val), i)
+function Depression(dep::CxxDepression)
+    dep_obj = dep.cpp_object
+    type = typeof(dep).parameters[1]
+    dep_sub_ptr = Ptr{DepressionSubset{type}}(dep_obj)
+    dep_sub = unsafe_load(Ptr{DepressionSubset{type}}(dep_sub_ptr))
+    ol = ocean_linked(dep)
+    Depression{type}(expand_struct(dep_sub)..., ol)
+end
+
+Base.IndexStyle(::Type{<:DepressionHierarchy}) = IndexLinear()
+Base.size(v::DepressionHierarchy) = (Int(size(v)),)
+Base.getindex(v::DepressionHierarchy, i::Int) = CxxWrap.StdLib.cxxgetindex(v, i)[]
+Base.setindex!(v::DepressionHierarchy{T}, val, i::Int) where {T} =
+    CxxWrap.StdLib.cxxsetindex!(v, convert(T, val), i)
 end #depressions
 
 end # module richdem

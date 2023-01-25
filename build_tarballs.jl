@@ -2,33 +2,33 @@
 # `julia build_tarballs.jl --help` to see a usage message.
 using BinaryBuilder, Pkg
 
-name = "richdem"
-version = v"2.3.1-cervest"
+name = "RichDEM"
+version = v"2.3.1"
 
 # Collection of sources required to complete build
 sources = [
-    GitSource("https://github.com/Cervest/richdem.git", "e22bc92469cbbcc67e2f7e3ff7c50789d898344d")
+    ArchiveSource("https://github.com/Cervest/richdem/archive/refs/tags/v$(version).zip", "6c87d1fa4c417b7f518c3f2964a1688d2e2f74b6b1381270dc38d741ec709db5")
 ]
 
 # Bash recipe for building across all platforms
 script = raw"""
 cd $WORKSPACE/srcdir
-cd richdem/
-mkdir build
-cd build
-cmake -DJulia_PREFIX=$Julia_PREFIX -DCMAKE_FIND_ROOT_PATH=$prefix -DJlCxx_DIR=$prefix/lib/cmake/JlCxx -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} -DCMAKE_BUILD_TYPE=Release -DUSE_GDAL=ON ../. 
-cmake --build . --config Release --target install :
+cd richdem-2.3.1/
+mkdir build && cd build
+cmake -DJulia_PREFIX=$prefix -DCMAKE_FIND_ROOT_PATH=$prefix -DJlCxx_DIR=$prefix/lib/cmake/JlCxx -DCMAKE_INSTALL_PREFIX=$prefix -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TARGET_TOOLCHAIN} -DCMAKE_BUILD_TYPE=Release -DUSE_GDAL=ON ../. 
+cmake --build . --config Release --target install 
 exit
 """
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
 platforms = [
+    Platform("i686", "linux"; libc = "glibc"),
     Platform("x86_64", "linux"; libc = "glibc"),
     Platform("aarch64", "linux"; libc = "glibc"),
     Platform("armv6l", "linux"; call_abi = "eabihf", libc = "glibc"),
     Platform("armv7l", "linux"; call_abi = "eabihf", libc = "glibc"),
-    Platform("x86_64", "linux"; libc = "musl"),
+    Platform("powerpc64le", "linux"; libc = "glibc"),
     Platform("aarch64", "linux"; libc = "musl"),
     Platform("armv6l", "linux"; call_abi = "eabihf", libc = "musl"),
     Platform("armv7l", "linux"; call_abi = "eabihf", libc = "musl")
@@ -37,8 +37,8 @@ platforms = [
 
 # The products that we will ensure are always built
 products = [
-    LibraryProduct("librichdem", :librichdem),
-    LibraryProduct("libjlrichdem", :libjlrichdem)
+    LibraryProduct("libjlrichdem", :libjlrichdem),
+    LibraryProduct("librichdem", :librichdem)
 ]
 
 # Dependencies that must be installed before this package can be built
