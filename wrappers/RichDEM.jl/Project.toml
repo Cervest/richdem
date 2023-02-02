@@ -10,7 +10,10 @@ RichDEM_jll = "77183ce2-e64e-50a0-b706-bc4fd4ad6a9c"
 libcxxwrap_julia_jll = "3eaa8342-bff7-56a5-9981-c04077f7cee7"
 
 [compat]
-julia = "1.6"
+julia = "=1.6.3, 1.8"
+CxxWrap = "0.13"
+RichDEM_jll = "2.3.1"
+libcxxwrap_julia_jll = "0.9.3"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

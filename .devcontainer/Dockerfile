@@ -2,8 +2,9 @@ FROM julia:latest
 
 # Install dependencies, definitely install gdal and openmp required by richdem
 RUN apt-get update && apt-get install -y build-essential gdb gdbserver \
-    libatomic1 python gfortran perl wget m4 cmake pkg-config git libgdal-dev g++ \
-    libomp-dev openmpi-bin libopenmpi-dev libboost-all-dev
+    libatomic1 python gfortran perl wget m4 cmake pkg-config git g++ \
+    libomp-dev openmpi-bin libopenmpi-dev libboost-all-dev libgdal-dev
+
 
 # Clone and Install libcxxwrap
 RUN set -eux; \
@@ -17,6 +18,7 @@ RUN set -eux; \
     julia -e 'using Pkg; Pkg.test("CxxWrap")'; \
     julia -e 'using CxxWrap; println(CxxWrap.prefix_path())'; \
     rm -rf libcxxwrap-julia build
+
 
 # Update C env vars so compiler can find gdal
 ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
