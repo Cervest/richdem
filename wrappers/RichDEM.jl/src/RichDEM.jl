@@ -1,12 +1,11 @@
-
-
 module RichDEM
 module common
+
 using CxxWrap
 using RichDEM_jll
-using Libdl
+
 #@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_julia_module, Libdl.RTLD_GLOBAL)
-@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module, Libdl.RTLD_GLOBAL)
+@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module)
 
 function __init__()
     @initcxx
@@ -17,9 +16,10 @@ Base.IndexStyle(::Type{<:Array2D}) = IndexCartesian()
 end #common
 
 module misc
+using Libdl
 using CxxWrap
 using RichDEM_jll
-using Libdl
+
 #@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module, Libdl.RTLD_GLOBAL)
 @wrapmodule(RichDEM_jll.libjlrichdem_path, :define_misc_module, Libdl.RTLD_GLOBAL)
 
@@ -29,9 +29,10 @@ end
 end #misc
 
 module depressions
+using Libdl
 using CxxWrap
 using RichDEM_jll
-using Libdl
+
 export Depression
 #@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module, Libdl.RTLD_GLOBAL)
 @wrapmodule(RichDEM_jll.libjlrichdem_path, :define_depressions_module, Libdl.RTLD_GLOBAL)
