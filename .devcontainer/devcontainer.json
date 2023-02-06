@@ -6,7 +6,12 @@
         "ms-vscode.cmake-tools"
     ],
     "dockerFile": "Dockerfile",
+    "build": {
+        "args": {
+            "BUILDKIT_INLINE_CACHE": "0"
+        }
+    },
     "runArgs": [
-        "--privileged" //this is to allow to run BinaryBuilder inside the container
+        "--privileged" //this is to allow to run BinaryBuilder inside the container 
     ]
 }
