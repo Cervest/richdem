@@ -115,7 +115,7 @@ JLCXX_MODULE define_depressions_module(jlcxx::Module &mod)
                                          const rd::Array2D<rd::dephier::dh_label_t> &label,
                                          const rd::Array2D<rd::flowdir_t> &flowdirs,
                                          rd::dephier::DepressionHierarchy<float> &deps,
-                                         rd::Array2D<double> &wtd)
+                                         rd::Array2D<float> &wtd)
                { return rd::dephier::FillSpillMerge(topo, label, flowdirs, deps, wtd); });
 
     mod.method("FillSpillMergeDouble", [](const rd::Array2D<double> &topo,
