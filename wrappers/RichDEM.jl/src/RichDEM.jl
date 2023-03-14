@@ -1,6 +1,6 @@
 module RichDEM
 module common
-
+using Libdl
 using CxxWrap
 using RichDEM_jll
 
