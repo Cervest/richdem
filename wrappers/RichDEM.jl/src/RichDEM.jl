@@ -2,11 +2,10 @@ module RichDEM
 module common
 
 using CxxWrap
-using Libdl
 using RichDEM_jll
 
-@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_julia_module, Libdl.RTLD_GLOBAL)
-#@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module)
+#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_julia_module, Libdl.RTLD_GLOBAL)
+@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module)
 
 function __init__()
     @initcxx
@@ -21,8 +20,8 @@ using Libdl
 using CxxWrap
 using RichDEM_jll
 
-@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module, Libdl.RTLD_GLOBAL)
-#@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_misc_module, Libdl.RTLD_GLOBAL)
+#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module, Libdl.RTLD_GLOBAL)
+@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_misc_module, Libdl.RTLD_GLOBAL)
 
 function __init__()
     @initcxx
