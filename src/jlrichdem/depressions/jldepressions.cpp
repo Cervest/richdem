@@ -18,6 +18,9 @@ namespace jlrichdem
         {
             using WrappedT = typename TypeWrapperT::type;
             using ScalarT = typename WrappedT::value_type;
+            wrapped.template constructor<rd::dephier::flat_c_idx, rd::dephier::flat_c_idx, rd::dephier::dh_label_t, rd::dephier::dh_label_t, rd::dephier::dh_label_t, ScalarT,
+                                         ScalarT, rd::dephier::dh_label_t, rd::dephier::dh_label_t, bool, std::vector<rd::dephier::dh_label_t>, rd::dephier::dh_label_t,
+                                         uint32_t, double, double, double>();
 
             wrapped.method("pit_cell", [](WrappedT &depression)
                            { return depression.pit_cell; });
