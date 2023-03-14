@@ -2,10 +2,11 @@ module RichDEM
 module common
 
 using CxxWrap
+using Libdl
 using RichDEM_jll
 
-#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_julia_module, Libdl.RTLD_GLOBAL)
-@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module)
+@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_julia_module, Libdl.RTLD_GLOBAL)
+#@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_julia_module)
 
 function __init__()
     @initcxx
@@ -20,8 +21,8 @@ using Libdl
 using CxxWrap
 using RichDEM_jll
 
-#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module, Libdl.RTLD_GLOBAL)
-@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_misc_module, Libdl.RTLD_GLOBAL)
+@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_misc_module, Libdl.RTLD_GLOBAL)
+#@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_misc_module, Libdl.RTLD_GLOBAL)
 
 function __init__()
     @initcxx
@@ -34,8 +35,8 @@ using CxxWrap
 using RichDEM_jll
 
 export Depression
-#@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module, Libdl.RTLD_GLOBAL)
-@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_depressions_module, Libdl.RTLD_GLOBAL)
+@wrapmodule("/workspaces/richdem/build/lib/libjlrichdem.so", :define_depressions_module, Libdl.RTLD_GLOBAL)
+#@wrapmodule(RichDEM_jll.libjlrichdem_path, :define_depressions_module, Libdl.RTLD_GLOBAL)
 
 function __init__()
     @initcxx
@@ -93,6 +94,15 @@ Base.size(v::DepressionHierarchy) = (Int(size(v)),)
 Base.getindex(v::DepressionHierarchy, i::Int) = CxxWrap.StdLib.cxxgetindex(v, i)[]
 Base.setindex!(v::DepressionHierarchy{T}, val, i::Int) where {T} =
     CxxWrap.StdLib.cxxsetindex!(v, convert(T, val), i)
+@cxxdereference function Base.push!(v::DepressionHierarchy, val) 
+    CxxWrap.StdLib.push_back(v, val)
+    return v
+end
+
+@cxxdereference function Base.resize!(v::DepressionHierarchy, n::Integer)
+    CxxWrap.StdLib.resize(v, n)
+    return v    
+end
 end #depressions
 
 end # module richdem
