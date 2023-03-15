@@ -94,6 +94,16 @@ namespace richdem::dephier
 
     // Total elevation of cells contained with the depression and its children
     double total_elevation = 0;
+
+    // constructors
+    Depression() {}
+    Depression(flat_c_idx pit_cell, flat_c_idx out_cell, dh_label_t parent, dh_label_t odep, dh_label_t geolink,
+               elev_t pit_elev, elev_t out_elev, dh_label_t lchild, dh_label_t rchild, bool ocean_parent,
+               std::vector<dh_label_t> ocean_linked, dh_label_t dep_label, uint32_t cell_count, double dep_vol, double water_vol,
+               double total_elevation) : pit_cell{pit_cell}, out_cell{out_cell}, parent{parent}, odep{odep}, geolink{geolink},
+                                         pit_elev{pit_elev}, out_elev{out_elev}, lchild{lchild}, rchild{rchild}, ocean_parent{ocean_parent},
+                                         ocean_linked{ocean_linked}, dep_label{dep_label}, cell_count{cell_count}, dep_vol{dep_vol}, water_vol{water_vol},
+                                         total_elevation{total_elevation} {}
   };
 
   // A key part of the algorithm is keeping track of the outlets which connect

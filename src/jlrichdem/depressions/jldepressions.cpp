@@ -18,6 +18,9 @@ namespace jlrichdem
         {
             using WrappedT = typename TypeWrapperT::type;
             using ScalarT = typename WrappedT::value_type;
+            wrapped.template constructor<rd::dephier::flat_c_idx, rd::dephier::flat_c_idx, rd::dephier::dh_label_t, rd::dephier::dh_label_t, rd::dephier::dh_label_t, ScalarT,
+                                         ScalarT, rd::dephier::dh_label_t, rd::dephier::dh_label_t, bool, std::vector<rd::dephier::dh_label_t>, rd::dephier::dh_label_t,
+                                         uint32_t, double, double, double>();
 
             wrapped.method("pit_cell", [](WrappedT &depression)
                            { return depression.pit_cell; });
@@ -62,10 +65,16 @@ namespace jlrichdem
             using WrappedT = typename TypeWrapperT::type;
             using StructT = typename WrappedT::value_type;
 
+            wrapped.template constructor<std::size_t>();
+
             wrapped.method("size", [](WrappedT &vec)
                            { return vec.size(); });
 
             wrapped.module().set_override_module(jlcxx::stl::StlWrappers::instance().module());
+            wrapped.method("push_back", [](WrappedT &v, const StructT val)
+                           { v.push_back(val); });
+            wrapped.method("resize", [](WrappedT &v, const int_t s)
+                           { v.resize(s); });
             wrapped.method("cxxgetindex", [](const WrappedT &v, int_t i) -> typename WrappedT::const_reference
                            { return v[i - 1]; });
             wrapped.method("cxxgetindex", [](WrappedT &v, int_t i) -> typename WrappedT::reference

@@ -40,23 +40,6 @@ export Depression
 function __init__()
     @initcxx
 end
-struct DepressionSubset{T}
-    pit_cell::UInt32
-    out_cell::UInt32
-    parent::UInt32
-    odep::UInt32
-    geolink::UInt32
-    pit_elev::T
-    out_elev::T
-    lchild::UInt32
-    rchild::UInt32
-    ocean_parent::Bool
-    dep_label::UInt32
-    cell_count::UInt32
-    dep_vol::Float64
-    water_vol::Float64
-    total_elevation::Float64
-end
 
 mutable struct Depression{T}
     pit_cell::UInt32
@@ -69,30 +52,39 @@ mutable struct Depression{T}
     lchild::UInt32
     rchild::UInt32
     ocean_parent::Bool
+    ocean_linked::Vector{UInt32}
     dep_label::UInt32
     cell_count::UInt32
     dep_vol::Float64
     water_vol::Float64
     total_elevation::Float64
-    ocean_linked::Vector{UInt32}
 end
 
 expand_struct(sub) = map(n -> getfield(sub, n), fieldnames(typeof(sub)))
 
-function Depression(dep::CxxDepression)
-    dep_obj = dep.cpp_object
-    type = typeof(dep).parameters[1]
-    dep_sub_ptr = Ptr{DepressionSubset{type}}(dep_obj)
-    dep_sub = unsafe_load(Ptr{DepressionSubset{type}}(dep_sub_ptr))
-    ol = ocean_linked(dep)
-    Depression{type}(expand_struct(dep_sub)..., ol)
+function Depression(dep::CxxDepression{T}) where {T}
+    Depression{T}(pit_cell(dep), out_cell(dep), parent(dep), odep(dep), geolink(dep), pit_elev(dep), 
+        out_elev(dep), lchild(dep), rchild(dep), ocean_parent(dep), ocean_linked(dep), dep_label(dep), 
+        cell_count(dep), dep_vol(dep), water_vol(dep), total_elevation(dep))
+
 end
+
 
 Base.IndexStyle(::Type{<:DepressionHierarchy}) = IndexLinear()
 Base.size(v::DepressionHierarchy) = (Int(size(v)),)
 Base.getindex(v::DepressionHierarchy, i::Int) = CxxWrap.StdLib.cxxgetindex(v, i)[]
 Base.setindex!(v::DepressionHierarchy{T}, val, i::Int) where {T} =
     CxxWrap.StdLib.cxxsetindex!(v, convert(T, val), i)
+
+@cxxdereference function Base.push!(v::DepressionHierarchy, val) 
+    CxxWrap.StdLib.push_back(v, val)
+    return v
+end
+
+@cxxdereference function Base.resize!(v::DepressionHierarchy, n::Integer)
+    CxxWrap.StdLib.resize(v, n)
+    return v    
+end
 end #depressions
 
 end # module richdem
