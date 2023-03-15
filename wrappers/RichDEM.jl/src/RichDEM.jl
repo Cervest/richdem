@@ -60,8 +60,6 @@ mutable struct Depression{T}
     total_elevation::Float64
 end
 
-expand_struct(sub) = map(n -> getfield(sub, n), fieldnames(typeof(sub)))
-
 function Depression(dep::CxxDepression{T}) where {T}
     Depression{T}(pit_cell(dep), out_cell(dep), parent(dep), odep(dep), geolink(dep), pit_elev(dep), 
         out_elev(dep), lchild(dep), rchild(dep), ocean_parent(dep), ocean_linked(dep), dep_label(dep), 

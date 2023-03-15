@@ -133,8 +133,8 @@ setuptools.setup(
   keywords         = 'GIS terrain hydrology geomorphology raster',
   #packages        = find_packages(exclude=['contrib', 'docs', 'tests*']),
   install_requires = [
-    "numpy>=1.7,<2; python_version > '3.4' or python_version < '3.0'",
-    "numpy>=1.7,<1.12; python_version < '3.4' and python_version > '3.0'"
+    "numpy>=1.22,<2; python_version > '3.4' or python_version < '3.0'",
+    "numpy>=1.22,<1.12; python_version < '3.4' and python_version > '3.0'"
   ],
   # extras_require    = {
   #   ':python_version > "3.4"': [
